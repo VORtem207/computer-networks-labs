@@ -12,7 +12,7 @@ filename = sys.argv[3]
 client_socket = socket(AF_INET, SOCK_STREAM)
 client_socket.connect((server_host, server_port))
 
-message = f"GET /{filename} HTTP/1.1 \r\n\r\n"
+message = f"GET /{filename} HTTP/1.1\r\n\r\n"
 client_socket.send(message.encode())
 
 
