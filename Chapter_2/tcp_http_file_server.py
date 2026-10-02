@@ -1,6 +1,4 @@
-import sys
 import threading
-import time
 
 from socket import *
 
@@ -16,8 +14,6 @@ serverSocket.listen(1)
 def handle_client(client_socket: socket):
     try:
         message = client_socket.recv(1024).decode()
-
-        time.sleep(10)
 
         filename = message.split()[1]
         f = open(filename[1:])
@@ -47,7 +43,3 @@ while True:
     client_socket, addr = serverSocket.accept()
     t = threading.Thread(target=handle_client, args=(client_socket,))
     t.start()
-
-
-serverSocket.close()
-sys.exit()
