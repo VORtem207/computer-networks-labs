@@ -8,6 +8,8 @@ server_address = ('localhost', 12000)
 client_socket = socket(AF_INET, SOCK_DGRAM)
 client_socket.settimeout(1)
 
+rtts = []
+
 
 for i in range(1, 11):
     message = f"Ping {i} {datetime.now().strftime("%H:%M:%S")}"
@@ -25,11 +27,30 @@ for i in range(1, 11):
 
         end_time = time.perf_counter()
         rtt = end_time - start_time
+        rtts.append(rtt)
 
         print(f"Answer: {answer.decode()} | RTT: {rtt}")
 
     except timeout:
         print("Request timed out")
+
+
+packet_loss_rate = int((10 - len(rtts)) / 10 * 100)
+
+if len(rtts) > 0:
+    min_rtt = min(rtts)
+    max_rtt = max(rtts)
+    avg_rtt = sum(rtts)/len(rtts)
+
+    print(
+        f"Statistics: Min RTT: {min_rtt}"
+        f" | Max RTT: {max_rtt}"
+        f" | Average RTT: {avg_rtt}"
+        f" | Package loss rate: {packet_loss_rate}%"
+    )
+
+else:
+    print(f"No RTTs found | Package loss rate: {packet_loss_rate}%")
 
 
 client_socket.close()
